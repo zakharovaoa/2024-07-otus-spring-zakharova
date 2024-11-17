@@ -7,12 +7,13 @@ import org.junit.jupiter.api.Test;
 import ru.otus.hw.dao.QuestionDao;
 import ru.otus.hw.domain.Answer;
 import ru.otus.hw.domain.Question;
+import ru.otus.hw.domain.Student;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 
@@ -41,10 +42,8 @@ public class TestServiceImplTest {
         var questions = List.of(question);
         given(ioService.readString()).willReturn("Nautilus");
         given(questionDao.findAll()).willReturn(questions);
-        String a = ioService.readString();
-        var b = questionDao.findAll().get(0);
-        assertTrue(testServiceImpl.checkAnswer(b, a));
+        var student = new Student("Воробьёв", "Олег");
+        var testResult = testServiceImpl.executeTestFor(student);
+        assertEquals(1, testResult.getRightAnswersCount());
     }
-
-
 }

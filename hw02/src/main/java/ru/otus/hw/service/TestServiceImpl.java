@@ -9,6 +9,8 @@ import ru.otus.hw.domain.Student;
 import ru.otus.hw.domain.TestResult;
 import ru.otus.hw.exceptions.QuestionReadException;
 
+import java.util.List;
+
 
 @Service
 @RequiredArgsConstructor
@@ -29,16 +31,20 @@ public class TestServiceImpl implements TestService {
                 ioService.printLine("Ошибка считывания вопросов");
                 return null;
             }
-            for (var question : questions) {
-                printQuestion(question);
-                var answerOfStudent = ioService.readString();
-                var isAnswerValid = checkAnswer(question, answerOfStudent);
-                testResult.applyAnswer(question, isAnswerValid);
-            }
+            checkAnswers(questions, testResult);
         } catch (QuestionReadException questionReadException) {
-            ioService.printLine(questionReadException.getMessage());
+            ioService.printLine("Ошибка чтения файла с вопросами");
         }
         return testResult;
+    }
+
+    private void checkAnswers(List<Question> questions, TestResult testResult) {
+        for (var question : questions) {
+            printQuestion(question);
+            var answerOfStudent = ioService.readString();
+            var isAnswerValid = checkAnswer(question, answerOfStudent);
+            testResult.applyAnswer(question, isAnswerValid);
+        }
     }
 
     private void printQuestion(Question question) {
@@ -49,7 +55,7 @@ public class TestServiceImpl implements TestService {
         ioService.printLine("");
     }
 
-    public boolean checkAnswer(Question question, String answerOfStudent) {
+    private boolean checkAnswer(Question question, String answerOfStudent) {
         var correctAnswer = question.answers().stream().filter(Answer::isCorrect).findAny();
         return correctAnswer.isPresent() && correctAnswer.get().text().equals(answerOfStudent);
     }
