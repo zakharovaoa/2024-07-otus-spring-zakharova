@@ -27,18 +27,14 @@ public class TestServiceImpl implements TestService {
             ioService.printLine("");
             ioService.printFormattedLine("Please answer the questions below%n");
             var questions = questionDao.findAll();
-            if (questions == null) {
-                ioService.printLine("Ошибка считывания вопросов");
-                return null;
-            }
-            checkAnswers(questions, testResult);
+            askQuestions(questions, testResult);
         } catch (QuestionReadException questionReadException) {
             ioService.printLine("Ошибка чтения файла с вопросами");
         }
         return testResult;
     }
 
-    private void checkAnswers(List<Question> questions, TestResult testResult) {
+    private void askQuestions(List<Question> questions, TestResult testResult) {
         for (var question : questions) {
             printQuestion(question);
             var answerOfStudent = ioService.readString();
