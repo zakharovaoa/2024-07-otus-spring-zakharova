@@ -29,7 +29,7 @@ public class TestServiceImpl implements TestService {
             var questions = questionDao.findAll();
             askQuestions(questions, testResult);
         } catch (QuestionReadException questionReadException) {
-            ioService.printLine("Ошибка чтения файла с вопросами");
+            ioService.printLineLocalized("TestService.error.read.questions");
         }
         return testResult;
     }

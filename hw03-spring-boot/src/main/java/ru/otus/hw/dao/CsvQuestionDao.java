@@ -26,7 +26,7 @@ public class CsvQuestionDao implements QuestionDao {
         try (InputStream inputStream = getClass().getClassLoader()
                 .getResourceAsStream(fileNameProvider.getTestFileName())) {
             if (inputStream == null) {
-                throw new QuestionReadException("Ошибка чтения файла с вопросами");
+                throw new QuestionReadException("Error reading the file with questions");
             }
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
             var resultList = new CsvToBeanBuilder<QuestionDto>(bufferedReader)
@@ -38,7 +38,7 @@ public class CsvQuestionDao implements QuestionDao {
             }
             return questionList;
         } catch (IOException e) {
-            throw new QuestionReadException("Ошибка чтения файла с вопросами", e);
+            throw new QuestionReadException("Error reading the file with questions", e);
         }
     }
 }
