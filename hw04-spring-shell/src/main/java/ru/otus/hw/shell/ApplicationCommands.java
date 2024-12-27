@@ -7,9 +7,11 @@ import org.springframework.shell.standard.ShellMethod;
 import org.springframework.shell.standard.ShellMethodAvailability;
 import ru.otus.hw.domain.Student;
 import ru.otus.hw.domain.TestResult;
+import ru.otus.hw.service.LocalizedMessagesServiceImpl;
 import ru.otus.hw.service.ResultService;
 import ru.otus.hw.service.StudentService;
 import ru.otus.hw.service.TestService;
+
 
 import static java.util.Objects.nonNull;
 import static org.apache.commons.lang3.ObjectUtils.isNotEmpty;
@@ -29,7 +31,11 @@ public class ApplicationCommands {
 
     private Student student;
 
-    @ShellMethod(value = "Run determine current student", key = {"r", "run"})
+    //private final LocalizedMessagesService localizedMessagesService;
+
+    private final LocalizedMessagesServiceImpl localizedMessagesServiceImpl;
+
+    @ShellMethod(value = "Run determine current student", key = {"l", "login"})
     public void run() {
         student = studentService.determineCurrentStudent();
     }
@@ -49,12 +55,23 @@ public class ApplicationCommands {
     private Availability isTestingAvailable() {
         return (nonNull(student) && isNotEmpty(student.getFullName()))
                 ? Availability.available()
-                : Availability.unavailable("Сначала введите ФИО");
+                : Availability.unavailable(getMessageIsTestingAvailable()); //"Сначала введите ФИО");
     }
 
     private Availability isResultAvailable() {
         return nonNull(testResult)
                 ? Availability.available()
-                : Availability.unavailable("Тест еще не проведён");
+                : Availability.unavailable(getMessageIsResultAvailable());//"Тест еще не проведён");
     }
+
+    private String getMessageIsTestingAvailable() {
+        //return localizedMessagesService.getMessage("ApplicationCommands.testing.available");
+        return localizedMessagesServiceImpl.getMessage("ApplicationCommands.testing.available");
+    }
+
+    private String getMessageIsResultAvailable() {
+        //return localizedMessagesService.getMessage("ApplicationCommands.result.available");
+        return localizedMessagesServiceImpl.getMessage("ApplicationCommands.result.available");
+    }
+
 }
