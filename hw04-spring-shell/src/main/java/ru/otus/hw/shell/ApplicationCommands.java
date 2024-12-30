@@ -7,7 +7,7 @@ import org.springframework.shell.standard.ShellMethod;
 import org.springframework.shell.standard.ShellMethodAvailability;
 import ru.otus.hw.domain.Student;
 import ru.otus.hw.domain.TestResult;
-import ru.otus.hw.service.LocalizedMessagesServiceImpl;
+import ru.otus.hw.service.LocalizedMessagesService;
 import ru.otus.hw.service.ResultService;
 import ru.otus.hw.service.StudentService;
 import ru.otus.hw.service.TestService;
@@ -27,13 +27,11 @@ public class ApplicationCommands {
 
     private final ResultService resultService;
 
+    private final LocalizedMessagesService localizedMessagesService;
+
     private TestResult testResult;
 
     private Student student;
-
-    //private final LocalizedMessagesService localizedMessagesService;
-
-    private final LocalizedMessagesServiceImpl localizedMessagesServiceImpl;
 
     @ShellMethod(value = "Run determine current student", key = {"l", "login"})
     public void run() {
@@ -65,13 +63,11 @@ public class ApplicationCommands {
     }
 
     private String getMessageIsTestingAvailable() {
-        //return localizedMessagesService.getMessage("ApplicationCommands.testing.available");
-        return localizedMessagesServiceImpl.getMessage("ApplicationCommands.testing.available");
+        return localizedMessagesService.getMessage("ApplicationCommands.testing.available");
     }
 
     private String getMessageIsResultAvailable() {
-        //return localizedMessagesService.getMessage("ApplicationCommands.result.available");
-        return localizedMessagesServiceImpl.getMessage("ApplicationCommands.result.available");
+        return localizedMessagesService.getMessage("ApplicationCommands.result.available");
     }
 
 }
