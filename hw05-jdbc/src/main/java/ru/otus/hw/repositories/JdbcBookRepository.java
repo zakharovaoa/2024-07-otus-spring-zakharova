@@ -34,7 +34,7 @@ public class JdbcBookRepository implements BookRepository {
         try {
             return Optional.ofNullable(namedParameterJdbcOperations.queryForObject("""
                     select b.id, b.title, a.id author_id, a.full_name author_full_name, g.id genre_id,
-                     g.name genre_name, from books b join authors a on a.id = b.author_id join genres g
+                     g.name genre_name, from books b left join authors a on a.id = b.author_id left join genres g
                       on g.id = b.genre_id where b.id = :id""", Map.of("id", id), new BookRowMapper()
             ));
         } catch (EmptyResultDataAccessException e) {
@@ -46,7 +46,7 @@ public class JdbcBookRepository implements BookRepository {
     public List<Book> findAll() {
         return jdbc.query("""
                 select b.id, b.title, a.id author_id, a.full_name author_full_name, g.id genre_id, g.name genre_name,
-                 from books b join authors a on a.id = b.author_id join genres g on g.id = b.genre_id""",
+                 from books b left join authors a on a.id = b.author_id left join genres g on g.id = b.genre_id""",
                 new BookRowMapper());
     }
 
